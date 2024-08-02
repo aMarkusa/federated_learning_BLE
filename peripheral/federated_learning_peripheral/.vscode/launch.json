@@ -1,0 +1,22 @@
+{
+    "configurations": [
+        {
+            "cwd": "${workspaceRoot}",
+            "name": "federated_learning_peripheral_silabs_debug",
+            "type": "cortex-debug",
+            "request": "launch",
+            "executable": "${workspaceFolder}/federated_learning_peripheral_cmake/build/default_config/federated_learning_peripheral.out",
+            "serverpath": "/home/markus/SimplicityStudio_v5/developer/adapter_packs/exx32/JLinkGDBServer",
+            "servertype": "jlink",
+            "armToolchainPath": "/home/markus/SimplicityStudio_v5/developer/toolchains/gnu_arm/12.2.rel1_2023.7/bin/",
+            "device": "EFR32MG24BxxxF1536",
+            "svdFile": "",
+            "runToEntryPoint": "main",
+            "serverArgs": [
+                "-select",
+                "usb = 440250566"
+            ],
+            "runToMain": true,
+        }
+    ]
+}
