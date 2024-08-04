@@ -79,15 +79,15 @@
 
     <!--Feature vector chunk-->
     <characteristic const="false" id="feature_vector_chunk" name="Feature vector chunk" sourceId="" uuid="d98d76d4-58fb-4946-b11a-55c6956bcf71">
-      <value length="247" type="hex" variable_length="true">00</value>
+      <value length="247" type="user" variable_length="true">00</value>
       <properties>
         <write authenticated="false" bonded="false" encrypted="false"/>
       </properties>
     </characteristic>
 
     <!--Label vector chunk-->
-    <characteristic const="false" name="Label vector chunk" sourceId="" uuid="0b17a09a-a33e-415f-977f-f401b55bc21f">
-      <value length="247" type="hex" variable_length="false">00</value>
+    <characteristic const="false" id="label_vector_chunk" name="Label vector chunk" sourceId="" uuid="0b17a09a-a33e-415f-977f-f401b55bc21f">
+      <value length="247" type="user" variable_length="false">00</value>
       <properties>
         <write authenticated="false" bonded="false" encrypted="false"/>
       </properties>
@@ -99,7 +99,7 @@
 
     <!--Feature vector max length-->
     <characteristic const="true" id="fv_max_len" name="Feature vector max length" sourceId="" uuid="b01191e2-1c71-4fa2-a7df-fcf32aff0e99">
-      <value length="2" type="hex" variable_length="false">03E8</value>
+      <value length="2" type="user" variable_length="false">03E8</value>
       <properties>
         <read authenticated="false" bonded="false" encrypted="false"/>
       </properties>
@@ -107,7 +107,7 @@
 
     <!--Label vector max length-->
     <characteristic const="true" id="lv_max_len" name="Label vector max length" sourceId="" uuid="7003a8c6-a669-4668-9a46-9b4bfcc9df7a">
-      <value length="2" type="hex" variable_length="false">03E8</value>
+      <value length="2" type="user" variable_length="false">03E8</value>
       <properties>
         <read authenticated="false" bonded="false" encrypted="false"/>
       </properties>
@@ -115,7 +115,7 @@
 
     <!--Feature vector length-->
     <characteristic const="false" id="fv_len" name="Feature vector length" sourceId="" uuid="78ac1d5d-2bcf-41fc-8a5e-64bc2016e74c">
-      <value length="2" type="hex" variable_length="true">00</value>
+      <value length="2" type="user" variable_length="true">00</value>
       <properties>
         <read authenticated="false" bonded="false" encrypted="false"/>
       </properties>
@@ -123,7 +123,7 @@
 
     <!--Label vector length-->
     <characteristic const="false" id="lv_len" name="Label vector length" sourceId="" uuid="88e199d9-45a6-43d6-bf42-7df79a3a56b8">
-      <value length="2" type="hex" variable_length="true">00</value>
+      <value length="2" type="user" variable_length="true">00</value>
       <properties>
         <read authenticated="false" bonded="false" encrypted="false"/>
       </properties>
@@ -131,7 +131,7 @@
 
     <!--Number of features-->
     <characteristic const="false" id="number_of_features" name="Number of features" sourceId="" uuid="e0b39c56-5e01-44ff-b67d-b6756e9c49cc">
-      <value length="0" type="hex" variable_length="true">00</value>
+      <value length="0" type="user" variable_length="true">00</value>
       <properties>
         <read authenticated="false" bonded="false" encrypted="false"/>
         <write authenticated="false" bonded="false" encrypted="false"/>
@@ -140,7 +140,7 @@
 
     <!--Number of labels-->
     <characteristic const="false" id="number_of_labels" name="Number of labels" sourceId="" uuid="66686ad2-2349-40bc-8672-1d4c078b640b">
-      <value length="1" type="hex" variable_length="false">00</value>
+      <value length="1" type="user" variable_length="false">00</value>
       <properties>
         <read authenticated="false" bonded="false" encrypted="false"/>
         <write authenticated="false" bonded="false" encrypted="false"/>

@@ -28,8 +28,8 @@
  *
  ******************************************************************************/
 
-#ifndef BLUETOOTH_H
-#define BLUETOOTH_H
+#ifndef SL_BLUETOOTH
+#define SL_BLUETOOTH
 
 #include <stdbool.h>
 #include "sl_power_manager.h"
@@ -69,4 +69,4 @@ void sl_bt_on_event(sl_bt_msg_t* evt);
 bool sli_bt_is_ok_to_sleep(void);
 sl_power_manager_on_isr_exit_t sli_bt_sleep_on_isr_exit(void);
 
-#endif // BLUETOOTH_H
+#endif /* SL_BLUETOOTH */

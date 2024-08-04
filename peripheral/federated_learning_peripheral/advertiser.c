@@ -3,8 +3,8 @@
 #include "app_assert.h"
 
 uint8_t advertising_set_handle = 0xff;
-const uint8_t advertising_data_len = 0x04;
-uint8_t advertising_data[] = {advertising_data_len, 0x09, 0x46, 0x4C, 0x50};  // Complete local name FLP = Federated learning peripheral
+const uint8_t advertising_data_len = 0x05;
+uint8_t advertising_data[] = {advertising_data_len - 1, 0x09, 0x46, 0x4C, 0x50};  // Complete local name FLP = Federated learning peripheral
 
 sl_status_t start_advertising(){
     sl_status_t sc;

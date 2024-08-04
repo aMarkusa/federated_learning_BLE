@@ -28,8 +28,30 @@
  *
  ******************************************************************************/
 
-#ifndef APP_H
-#define APP_H
+#ifndef APP
+#define APP
+
+#include <stdint.h>
+
+uint16_t fv_max_len;
+uint16_t lv_max_len;
+
+typedef enum {
+    IDLE,
+    ADVERTISING,
+    CONNECTED,
+    RECEIVING_TRAINING_DATA,
+    SYNCED,
+    TRAINING_MODEL,
+    WAITING_FOR_PARAMETERS,
+} app_state_t;
+
+typedef struct {
+    app_state_t current_state;
+    app_state_t previous_state;
+} app_fsm_t;
+
+void app_set_new_state(app_state_t new_state);
 
 /**************************************************************************//**
  * Application Init.
@@ -41,4 +63,4 @@ void app_init(void);
  *****************************************************************************/
 void app_process_action(void);
 
-#endif // APP_H
+#endif /* APP */

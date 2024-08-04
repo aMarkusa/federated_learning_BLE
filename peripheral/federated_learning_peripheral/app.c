@@ -32,20 +32,21 @@
 #include "sl_bluetooth.h"
 #include "app.h"
 #include "advertiser.h"
+#include "gatt_handlers.h"
 
-// TODO: Set device name in GATT
-// TODO: Create init for GATT values
+static uint8_t conn_handle = 0xff;
+app_fsm_t app_fsm;
 
-
-// The advertising set handle allocated from Bluetooth stack.
-static uint8_t advertising_set_handle = 0xff;
+uint16_t fv_max_len = 1000;
+uint16_t lv_max_len = 1000;
 
 /**************************************************************************//**
  * Application Init.
  *****************************************************************************/
 SL_WEAK void app_init(void)
 {
-
+	app_fsm.current_state = IDLE;
+	app_fsm.previous_state = IDLE;
 }
 
 /**************************************************************************//**
@@ -75,37 +76,38 @@ void sl_bt_on_event(sl_bt_msg_t *evt)
     // This event indicates the device has started and the radio is ready.
     // Do not call any stack command before receiving this boot event!
     case sl_bt_evt_system_boot_id:
-      // start advertising
-      sc = start_advertising();
-	  app_assert(sc);
-      break;
+      	// start advertising
+      	sc = start_advertising();
+		app_assert_status(sc);
+		app_set_new_state(ADVERTISING);
+     	break;
 
     // -------------------------------
     // This event indicates that a new connection was opened.
     case sl_bt_evt_connection_opened_id:
-      break;
+		// TODO: Implement filter for only FLC
+		conn_handle = evt->data.evt_connection_opened.connection;
+		app_set_new_state(CONNECTED);
+      	break;
 
     // -------------------------------
     // This event indicates that a connection was closed.
     case sl_bt_evt_connection_closed_id:
-      // Generate data for advertising
-      sc = sl_bt_legacy_advertiser_generate_data(advertising_set_handle,
-                                                 sl_bt_advertiser_general_discoverable);
-      app_assert_status(sc);
+		app_set_new_state(IDLE);
+      	break;
 
-      // Restart advertising after client has disconnected.
-      sc = sl_bt_legacy_advertiser_start(advertising_set_handle,
-                                         sl_bt_legacy_advertiser_connectable);
-      app_assert_status(sc);
-      break;
+	case sl_bt_evt_gatt_server_user_read_request_id:
+		// TODO: Implement GATT handler
+		sc = user_read_request_handler(evt, conn_handle);
+		app_assert_status(sc);
+		break;
 
-    ///////////////////////////////////////////////////////////////////////////
-    // Add additional event handlers here as your application requires!      //
-    ///////////////////////////////////////////////////////////////////////////
-
-    // -------------------------------
-    // Default event handler.
     default:
       break;
   }
+}
+
+void app_set_new_state(app_state_t new_state) {
+	app_fsm.previous_state = app_fsm.current_state;
+	app_fsm.current_state = new_state;
 }

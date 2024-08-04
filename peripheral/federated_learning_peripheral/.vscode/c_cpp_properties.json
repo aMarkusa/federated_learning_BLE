@@ -6,7 +6,7 @@
                 "${workspaceFolder}/**"
             ],
             "defines": [],
-            "compilerPath": "",
+            "compilerPath": "/home/markus/SimplicityStudio_v5/developer/toolchains/gnu_arm/12.2.rel1_2023.7/bin",
             "configurationProvider": "ms-vscode.cmake-tools"
         }
     ],
