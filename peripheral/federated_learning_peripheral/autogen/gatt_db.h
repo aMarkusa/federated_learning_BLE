@@ -14,23 +14,21 @@ extern const sli_bt_gattdb_t gattdb;
 #define gattdb_database_hash                  6
 #define gattdb_client_support_features        8
 #define gattdb_device_name                    11
-#define gattdb_device_information             14
 #define gattdb_manufacturer_name_string       16
 #define gattdb_model_number_string            18
 #define gattdb_hardware_revision_string       20
 #define gattdb_firmware_revision_string       22
 #define gattdb_system_id                      24
-#define gattdb_app_training_data              25
 #define gattdb_feature_vector_chunk           27
-#define gattdb_app_training_data_metadata     30
 #define gattdb_fv_max_len                     32
 #define gattdb_lv_max_len                     34
 #define gattdb_fv_len                         36
 #define gattdb_lv_len                         38
-#define gattdb_app_machine_learning_model     39
-#define gattdb_model_params                   41
-#define gattdb_model                          43
-#define gattdb_hyperparams                    45
+#define gattdb_number_of_features             40
+#define gattdb_number_of_labels               42
+#define gattdb_model_params                   45
+#define gattdb_model                          47
+#define gattdb_hyperparams                    49
 
 
 #endif // __GATT_DB_H

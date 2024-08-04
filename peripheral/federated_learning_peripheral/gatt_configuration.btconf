@@ -99,7 +99,7 @@
 
     <!--Feature vector max length-->
     <characteristic const="true" id="fv_max_len" name="Feature vector max length" sourceId="" uuid="b01191e2-1c71-4fa2-a7df-fcf32aff0e99">
-      <value length="2" type="hex" variable_length="false">03E8</value>
+      <value length="2" type="hex" variable_length="false">00</value>
       <properties>
         <read authenticated="false" bonded="false" encrypted="false"/>
       </properties>
@@ -107,7 +107,7 @@
 
     <!--Label vector max length-->
     <characteristic const="true" id="lv_max_len" name="Label vector max length" sourceId="" uuid="7003a8c6-a669-4668-9a46-9b4bfcc9df7a">
-      <value length="2" type="hex" variable_length="false">03E8</value>
+      <value length="2" type="hex" variable_length="false">00</value>
       <properties>
         <read authenticated="false" bonded="false" encrypted="false"/>
       </properties>
@@ -126,24 +126,6 @@
       <value length="2" type="hex" variable_length="true">00</value>
       <properties>
         <read authenticated="false" bonded="false" encrypted="false"/>
-      </properties>
-    </characteristic>
-
-    <!--Number of features-->
-    <characteristic const="false" id="number_of_features" name="Number of features" sourceId="" uuid="e0b39c56-5e01-44ff-b67d-b6756e9c49cc">
-      <value length="0" type="hex" variable_length="true">00</value>
-      <properties>
-        <read authenticated="false" bonded="false" encrypted="false"/>
-        <write authenticated="false" bonded="false" encrypted="false"/>
-      </properties>
-    </characteristic>
-
-    <!--Number of labels-->
-    <characteristic const="false" id="number_of_labels" name="Number of labels" sourceId="" uuid="66686ad2-2349-40bc-8672-1d4c078b640b">
-      <value length="1" type="hex" variable_length="false">00</value>
-      <properties>
-        <read authenticated="false" bonded="false" encrypted="false"/>
-        <write authenticated="false" bonded="false" encrypted="false"/>
       </properties>
     </characteristic>
   </service>
