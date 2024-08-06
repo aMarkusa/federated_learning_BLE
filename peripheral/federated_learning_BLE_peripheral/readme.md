@@ -1,111 +1,68 @@
-# SoC - Empty
+# Wireless Federated learning peripheral
 
-The Bluetooth SoC-Empty example is a project that you can use as a template for any standalone Bluetooth application.
+## Introduction
 
-> Note: this example expects a specific Gecko Bootloader to be present on your device. For details see the Troubleshooting section.
+This project serves as the peripheral, or trainer, in the wireless fl PoC. This role has the following requirements:
 
-## Getting Started
+1. Receive training data and starting parameters from the central device via BLE
+2. Train a predetermined model on this training data
+3. Send the optimized parameters back to the central via BLE
+4. Wait for new global parameters
 
-To learn the Bluetooth technology basics, see [UG103.14: Bluetooth LE Fundamentals](https://www.silabs.com/documents/public/user-guides/ug103-14-fundamentals-ble.pdf).
+## BLE functional details
 
-To get started with Silicon Labs Bluetooth and Simplicity Studio, see [QSG169: Bluetooth SDK v3.x Quick Start Guide](https://www.silabs.com/documents/public/quick-start-guides/qsg169-bluetooth-sdk-v3x-quick-start-guide.pdf).
+### Receiving training data and starting parameters
 
-The term SoC stands for "System on Chip", meaning that this is a standalone application that runs on the EFR32/BGM and does not require any external MCU or other active components to operate.
+The training data can be quite large (several kB), so connection-based communication is required. Using OTS would be beneficial, but to get going the dataset will be split according to the MTU and written in chunks from the central to peripheral. During this process the starting parameters will also be written to the peripheral.
 
-As the name implies, the example is an (almost) empty template that has only the bare minimum to make a working Bluetooth application. This skeleton can be extended with the application logic.
+### Sending optimized parameters and receiving global parameters
 
-The development of a Bluetooth applications consist of three main steps:
+As the parameters are relatively small in size, PAwR will be used for sending and receiving parameters. This enables the central to speak with multiple peripheral effectively.
 
-* Designing the GATT database
-* Responding to the events raised by the Bluetooth stack
-* Implementing additional application logic
+## Custom GATT Services
 
-These steps are covered in the following sections. To learn more about programming an SoC application, see [UG434: Silicon Labs Bluetooth ® C Application Developer's Guide for SDK v3.x](https://www.silabs.com/documents/public/user-guides/ug434-bluetooth-c-soc-dev-guide-sdk-v3x.pdf).
+The peripheral will include the following custom services and characteristics in the GATT database
 
-## Designing the GATT Database
+1. **Training data service** (6e4fd68b-8cc4-4006-ab83-555fbcd6e10c)
 
-The SOC-empty example implements a basic GATT database. GATT definitions (services/characteristics) can be extended using the GATT Configurator, which can be found under Advanced Configurators in the Software Components tab of the Project Configurator. To open the Project Configurator, open the .slcp file of the project.
+    1. **Feature vector** (d98d76d4-58fb-4946-b11a-55c6956bcf71)
 
-![Opening GATT Configurator](image/readme_img1.png)
+        * 2-dimensional uint16_t array
 
-To learn how to use the GATT Configurator, see [UG438: GATT Configurator User’s Guide for Bluetooth SDK v3.x](https://www.silabs.com/documents/public/user-guides/ug438-gatt-configurator-users-guide-sdk-v3x.pdf).
+    2. **Label vector** (0b17a09a-a33e-415f-977f-f401b55bc21f)
 
-## Responding to Bluetooth Events
+        * 2-dimensional uint16_t array
 
-A Bluetooth application is event driven. The Bluetooth stack generates events e.g., when a remote device connects or disconnects or when it writes a characteristic in the local GATT database. The application has to handle these events in the `sl_bt_on_event()` function. The prototype of this function is implemented in *app.c*. To handle more events, the switch-case statement of this function is to be extended. For the list of Bluetooth events, see the online [Bluetooth API Reference](https://docs.silabs.com/bluetooth/latest/).
+2. **Training data metadata service** (7cede457-58b3-49ed-8018-da3321c2fb90)
 
-## Implementing Application Logic
+    1. **Feature vector max length** (b01191e2-1c71-4fa2-a7df-fcf32aff0e99)
 
-Additional application logic has to be implemented in the `app_init()` and `app_process_action()` functions. Find the definitions of these functions in *app.c*. The `app_init()` function is called once when the device is booted, and `app_process_action()` is called repeatedly in a while(1) loop. For example, you can poll peripherals in this function. To save energy and to have this function called at specific intervals only, for example once every second, use the services of the [Sleeptimer](https://docs.silabs.com/gecko-platform/latest/service/api/group-sleeptimer). If you need a more sophisticated application, consider using RTOS (see [AN1260: Integrating v3.x Silicon Labs Bluetooth Applications with Real-Time Operating Systems](https://www.silabs.com/documents/public/application-notes/an1260-integrating-v3x-bluetooth-applications-with-rtos.pdf)).
+        * uint16_t
 
-## Features Already Added to the SOC-Empty Application
+    2. **Label vector max length** (7003a8c6-a669-4668-9a46-9b4bfcc9df7a)
 
-The SOC-Empty application is ***almost*** empty. It implements a basic application to demonstrate how to handle events, how to use the GATT database, and how to add software components.
+        * uint16_t
 
-* A simple application is implemented in the event handler function that starts advertising on boot (and on connection_closed event). This makes it possible for remote devices to find the device and connect to it.
-* A simple GATT database is defined by adding Generic Access and Device Information services. This makes it possible for remote devices to read out some basic information such as the device name.
-* The OTA DFU software component is added, which extends both the event handlers (see *sl_ota_dfu.c*) and the GATT database (see *ota_dfu.xml*). This makes it possible to make Over-The-Air Device-Firmware-Upgrade without any additional application code.
+    3. **Feature vector length** (78ac1d5d-2bcf-41fc-8a5e-64bc2016e74c)
 
-## Testing the SOC-Empty Application
+        * Describes how long the actual vector is
+        * uint16_t
 
-As described above, an empty example does nothing except advertising and letting other devices connect and read its basic GATT database. To test this feature, do the following:
+    4. **Label vector length** (88e199d9-45a6-43d6-bf42-7df79a3a56b8)
 
-1. Build and flash the SoC-Empty example to your device.
-2. Make sure a bootloader is installed. See the Troubleshooting section.
-3. Download the **EFR Connect** smartphone app, available on [iOS](https://apps.apple.com/us/app/efr-connect/id1030932759) and [Android](https://play.google.com/store/apps/details?id=com.siliconlabs.bledemo).
-4. Open the app and choose the Bluetooth Browser.
-   ![EFR Connect start screen](image/readme_img2.png)
-5. Now you should find your device advertising as "Empty Example". Tap **Connect**.
-   ![Bluetooth Browser](image/readme_img3.png)
-6. The connection is opened, and the GATT database is automatically discovered. Find the device name characteristic under Generic Access service and try to read out the device name.
-   ![GATT database of the device](image/readme_img4.png)
+        * Describes how long the actual vector is
+        * uint16_t
 
-## Troubleshooting
+3. **Machine learning model service** (c1c8580d-0c54-4f49-bf31-58404adde68a)
 
-### Bootloader Issues
+    1. **Model parameters** (dc7fd511-6425-4cbd-a21f-837f4c344bf7)
 
-Note that Example Projects do not include a bootloader. However, Bluetooth-based Example Projects expect a bootloader to be present on the device in order to support device firmware upgrade (DFU). To get your application to work, you should either 
-- flash the proper bootloader or
-- remove the DFU functionality from the project.
+        * uint16_t array
 
-**If you do not wish to add a bootloader**, then remove the DFU functionality by uninstalling the *Bootloader Application Interface* software component -- and all of its dependants. This will automatically put your application code to the start address of the flash, which means that a bootloader is no longer needed, but also that you will not be able to upgrade your firmware.
+    2. **Model** (fedae635-703a-4c9a-8720-d35241048fed)
 
-**If you want to add a bootloader**, then either 
-- Create a bootloader project, build it and flash it to your device. Note that different projects expect different bootloaders:
-  - for NCP and RCP projects create a *BGAPI UART DFU* type bootloader
-  - for SoC projects on Series 2 devices create a *Bluetooth Apploader OTA DFU* type bootloader
+        * Enum describing the model
 
-- or run a precompiled Demo on your device from the Launcher view before flashing your application. Precompiled demos flash both bootloader and application images to the device. Flashing your own application image after the demo will overwrite the demo application but leave the bootloader in place. 
-  - For NCP and RCP projects, flash the *Bluetooth - NCP* demo.
-  - For SoC projects, flash the *Bluetooth - SoC Thermometer* demo.
+    3. **Hyperparameters** (7e76dec4-7655-44ea-8dee-84db34d963db)
 
-**Important Notes:** 
-- when you flash your application image to the device, use the *.hex* or *.s37* output file. Flashing *.bin* files may overwrite (erase) the bootloader.
-
-- On Series 2 devices SoC example projects require a *Bluetooth Apploader OTA DFU* type bootloader by default. This bootloader needs a lot of flash space and does not fit into the regular bootloader area, hence the application start address must be shifted. This shift is automatically done by the *Apploader Support for Applications* software component, which is installed by default. If you want to use any other bootloader type, you should remove this software component in order to shift the application start address back to the end of the regular bootloader area. Note, that in this case you cannot do OTA DFU with Apploader, but you can still implement application-level OTA DFU by installing the *Application OTA DFU* software component instead of *In-place OTA DFU*.
-
-For more information on bootloaders, see [UG103.6: Bootloader Fundamentals](https://www.silabs.com/documents/public/user-guides/ug103-06-fundamentals-bootloading.pdf) and [UG489: Silicon Labs Gecko Bootloader User's Guide for GSDK 4.0 and Higher](https://cn.silabs.com/documents/public/user-guides/ug489-gecko-bootloader-user-guide-gsdk-4.pdf).
-
-
-### Programming the Radio Board
-
-Before programming the radio board mounted on the mainboard, make sure the power supply switch is in the AEM position (right side) as shown below.
-
-![Radio board power supply switch](image/readme_img0.png)
-
-
-## Resources
-
-[Bluetooth Documentation](https://docs.silabs.com/bluetooth/latest/)
-
-[UG103.14: Bluetooth LE Fundamentals](https://www.silabs.com/documents/public/user-guides/ug103-14-fundamentals-ble.pdf)
-
-[QSG169: Bluetooth SDK v3.x Quick Start Guide](https://www.silabs.com/documents/public/quick-start-guides/qsg169-bluetooth-sdk-v3x-quick-start-guide.pdf)
-
-[UG434: Silicon Labs Bluetooth ® C Application Developer's Guide for SDK v3.x](https://www.silabs.com/documents/public/user-guides/ug434-bluetooth-c-soc-dev-guide-sdk-v3x.pdf)
-
-[Bluetooth Training](https://www.silabs.com/support/training/bluetooth)
-
-## Report Bugs & Get Support
-
-You are always encouraged and welcome to report any issues you found to us via [Silicon Labs Community](https://www.silabs.com/community).
+        * uint16_t array

@@ -1,7 +1,7 @@
 {
 	"folders": [
 		{
-			"path": "federated_learning_peripheral"
+			"path": "federated_learning_BLE_peripheral"
 		}
 	],
 	"settings": {
