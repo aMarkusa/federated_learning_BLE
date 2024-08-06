@@ -4,5 +4,9 @@
 			"path": "federated_learning_peripheral"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"files.associations": {
+			"em_common.h": "c"
+		}
+	}
 }

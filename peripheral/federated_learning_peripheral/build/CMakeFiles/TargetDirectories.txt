@@ -1,4 +1,0 @@
-/home/markus/git/federated_learning_BLE/peripheral/federated_learning_peripheral/build/CMakeFiles/slc_federated_learning_peripheral.dir
-/home/markus/git/federated_learning_BLE/peripheral/federated_learning_peripheral/build/CMakeFiles/federated_learning_peripheral.dir
-/home/markus/git/federated_learning_BLE/peripheral/federated_learning_peripheral/build/CMakeFiles/edit_cache.dir
-/home/markus/git/federated_learning_BLE/peripheral/federated_learning_peripheral/build/CMakeFiles/rebuild_cache.dir
