@@ -110,4 +110,55 @@
       </properties>
     </characteristic>
   </service>
+
+  <!--Training Data-->
+  <service advertise="false" id="training_data" name="Training Data" requirement="mandatory" sourceId="" type="primary" uuid="6e4fd68b-8cc4-4006-ab83-555fbcd6e10c">
+
+    <!--Feature Vector-->
+    <characteristic const="false" id="feature_vector" name="Feature Vector" sourceId="" uuid="d98d76d4-58fb-4946-b11a-55c6956bcf71">
+      <value length="0" type="user" variable_length="false">00</value>
+      <properties>
+        <write authenticated="false" bonded="false" encrypted="false"/>
+      </properties>
+    </characteristic>
+
+    <!--Label Vector-->
+    <characteristic const="false" id="label_vector" name="Label Vector" sourceId="" uuid="0b17a09a-a33e-415f-977f-f401b55bc21f">
+      <value length="0" type="user" variable_length="false">00</value>
+      <properties>
+        <write authenticated="false" bonded="false" encrypted="false"/>
+      </properties>
+    </characteristic>
+  </service>
+
+  <!--Machine Learning Model-->
+  <service advertise="false" id="ml_model" name="Machine Learning Model" requirement="mandatory" sourceId="" type="primary" uuid="c1c8580d-0c54-4f49-bf31-58404adde68a">
+
+    <!--Model Parameters-->
+    <characteristic const="false" id="model_params" name="Model Parameters" sourceId="" uuid="dc7fd511-6425-4cbd-a21f-837f4c344bf7">
+      <value length="0" type="user" variable_length="false">00</value>
+      <properties>
+        <read authenticated="false" bonded="false" encrypted="false"/>
+        <write authenticated="false" bonded="false" encrypted="false"/>
+      </properties>
+    </characteristic>
+
+    <!--Model-->
+    <characteristic const="false" id="model" name="Model" sourceId="" uuid="fedae635-703a-4c9a-8720-d35241048fed">
+      <value length="0" type="user" variable_length="false">00</value>
+      <properties>
+        <read authenticated="false" bonded="false" encrypted="false"/>
+        <write authenticated="false" bonded="false" encrypted="false"/>
+      </properties>
+    </characteristic>
+
+    <!--Hyperparameters-->
+    <characteristic const="false" id="hyperparams" name="Hyperparameters" sourceId="" uuid="7e76dec4-7655-44ea-8dee-84db34d963db">
+      <value length="0" type="user" variable_length="false">00</value>
+      <properties>
+        <read authenticated="false" bonded="false" encrypted="false"/>
+        <write authenticated="false" bonded="false" encrypted="false"/>
+      </properties>
+    </characteristic>
+  </service>
 </gatt>

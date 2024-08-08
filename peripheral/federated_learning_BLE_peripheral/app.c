@@ -90,7 +90,7 @@ void sl_bt_on_event(sl_bt_msg_t *evt)
       	break;
 
     case sl_bt_evt_connection_closed_id:
-		app_log_info("Connection closed.\n");
+		app_log_info("Connection closed with reason: 0x%x\n", evt->data.evt_connection_closed.reason);
 		app_set_new_state(IDLE);	
       	break;
 
@@ -101,6 +101,11 @@ void sl_bt_on_event(sl_bt_msg_t *evt)
 	case sl_bt_evt_gatt_server_user_read_request_id:
 		app_log_info("GATT Server User Read Request received.\n");
 		sc = user_read_request_handler(evt, conn_handle);
+		app_assert_status(sc);
+		break;
+	case sl_bt_evt_gatt_server_user_write_request_id:
+		app_log_info("GATT Server User Write Request received.\n");
+		sc = user_write_request_handler(evt, conn_handle);
 		app_assert_status(sc);
 		break;
     default:
