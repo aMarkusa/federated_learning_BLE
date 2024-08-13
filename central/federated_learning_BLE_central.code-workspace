@@ -1,0 +1,10 @@
+{
+    "folders": [
+        {
+            "path": "federated_learning_BLE_central_host"
+        },
+        {
+            "path": "federated_learning_BLE_central_ncp"
+        }
+    ]
+}

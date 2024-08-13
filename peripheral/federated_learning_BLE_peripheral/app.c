@@ -33,6 +33,8 @@
 #include "advertiser.h"
 #include "gatt_handlers.h"
 
+// TODO: Implement L2CAP channel
+
 
 // The advertising set handle allocated from Bluetooth stack.
 static uint8_t conn_handle = 0xff;

@@ -14,7 +14,7 @@
             "runToEntryPoint": "main",
             "serverArgs": [
                 "-select",
-                "usb = 440250566"
+                "usb = 440293088"
             ],
             "runToMain": true,
         }
