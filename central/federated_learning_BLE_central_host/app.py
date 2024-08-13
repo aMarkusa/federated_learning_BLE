@@ -28,6 +28,11 @@ Empty NCP-host Example Application.
 import os.path
 import sys
 import logging
+import threading
+from time import sleep
+
+# TODO: Add FSM
+# TODO: Implement L2CAP
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "../.."))
 from common.util import ArgumentParser, BluetoothApp, get_connector
@@ -41,11 +46,17 @@ SCAN_MODE = 0x00  # Passive mode
 SCAN_INTERVAL = 800  # 500ms
 SCAN_WINDOW = 800  # 500ms
 SCAN_PHY = 0x01  # 1M Phy
-SCAN_DISCOVERY_MODE = 0x01  # Generic mode
-LOG_LEVEL = logging.DEBUG
+SCAN_DISCOVERY_MODE = 0x02  # Observation mode  # FIXME: Why does this have to be obs mode?
+LOG_LEVEL = logging.INFO
+FEDERATED_LEARNING_PERIPHERAL_NAME = "FLP"
+SCAN_DURATION_S = 5
 
 
 class App(BluetoothApp):
+    def __init__(self, connector):
+        self.advertising_flps = []
+        super().__init__(connector)
+        
     """ Application derived from generic BluetoothApp. """
     def bt_evt_system_boot(self, evt):
         """ Bluetooth event callback
@@ -66,8 +77,12 @@ class App(BluetoothApp):
         self.log.info(f"Connection closed with reason {evt.reason:#x}: '{evt.reason}'")
         
     def bt_evt_scanner_legacy_advertisement_report(self, evt):
-        self.is_fl_peripheral(evt.data)
-        self.log.info("Received advertisement report.")
+        if self.is_fl_peripheral(evt.data):
+            address = evt.address
+            if address not in self.advertising_flps:
+                self.log.info(f"Received advertisement from FLP at {address}")
+                self.advertising_flps.append(address)
+        
 
 
     def scan_start(self):
@@ -75,18 +90,41 @@ class App(BluetoothApp):
         self.lib.bt.scanner.set_parameters(SCAN_MODE, SCAN_INTERVAL,
                                            SCAN_WINDOW)
         self.lib.bt.scanner.start(SCAN_PHY, SCAN_DISCOVERY_MODE)
-        self.log.info("Scanning started.")
+        self.log.info(f"Scanning started.")
+        threading.Timer(SCAN_DURATION_S, self.stop_scanning_for_flp).start()
                                            
     def scan_stop(self):
         self.lib.bt.scanner.stop()
         self.log.info("Scanning stopped.")     
         
     def is_fl_peripheral(self, adv_data):
+        self.log.debug(f"Raw adv data: {adv_data}")
         adv_data = list(adv_data)
-        self.log.debug(list(adv_data))
+        if device_name_from_adv(adv_data) == FEDERATED_LEARNING_PERIPHERAL_NAME:
+            return True
+        else:
+            return False
+    
+    def stop_scanning_for_flp(self):
+        self.log.info(f"Scan duration of {SCAN_DURATION_S} seconds has elapsed.")
+        self.scan_stop()
+        self.log.info(f"Discovered a total of {len(self.advertising_flps)} FLPs.")
         
 def device_name_from_adv(adv_data):
-    pass
+    adv_data_len = len(adv_data)
+    i = 0
+    while i < adv_data_len:
+        adv_type_len = adv_data[i]
+        adv_type = adv_data[i+1]
+        if adv_type == 0x09:
+            device_name = adv_data[(i+2):(i+2+adv_type_len):]
+            device_name = ''.join(map(chr, device_name))
+            return device_name
+        else:
+            i = i + adv_type_len + 1
+    
+    return None
+        
 
 # Script entry point.
 if __name__ == "__main__":
@@ -96,4 +134,8 @@ if __name__ == "__main__":
     # Instantiate the application.
     app = App(connector)
     # Running the application blocks execution until it terminates.
-    app.run()
+    # app.daemon = True
+    app.start()
+    while 1:
+        sleep(2)
+        print("hello")
